@@ -32,13 +32,17 @@ $ aws ec2 ...
 
 ### awsip
 
+```
 $ awsip my-instance
 10.10.10.10
 $
+```
 
 ### awssh
 
+```
 $ awssh my-instance 'echo hello from $(hostname)'
 
 hello from ip-10.10.10.10.ec2.internal
+```
 
