@@ -1,5 +1,5 @@
 #
-# aws-mfa-auth.sh - set AWS environment variables from get-session-token
+# aws.sh - Handy shell functions to make working with AWS easier
 #
 # Copyright 2017 Customer Value Partners
 #
@@ -15,7 +15,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-aws-mfa-auth() {
+# return private IP of first instance that matches given name
+awsip() {
+  # verify awscli is installed
+  command -v aws >/dev/null 2>&1 || {
+    echo >&2 "aws not available on PATH.";
+    return 1;
+  }
+
+  host=$1
+  aws ec2 describe-instances \
+    --region us-east-1 \
+    --filters "Name=tag:Name,Values=${host}" \
+    --query 'Reservations[*].Instances[*].[PrivateIpAddress]' \
+    --output text | head -1
+}
+
+awssh() {
+  ip=$1
+  shift
+  ssh $(awsip ${ip}) $@
+}
+
+awsmfa() {
 
     # verify awscli is installed
     command -v aws >/dev/null 2>&1 || {
