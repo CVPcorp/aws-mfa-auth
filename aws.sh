@@ -27,6 +27,7 @@ awsip() {
   aws ec2 describe-instances \
     --region us-east-1 \
     --filters "Name=tag:Name,Values=${host}" \
+              'Name=instance-state-name,Values=running' \
     --query 'Reservations[*].Instances[*].[PrivateIpAddress]' \
     --output text | head -1
 }
